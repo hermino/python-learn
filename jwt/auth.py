@@ -5,7 +5,6 @@ from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
 
 from constants import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, REFRESH_TOKEN_EXPIRE_DAYS
-from models import Token
 
 fake_users_db = {}
 refresh_token_db = {}
@@ -15,14 +14,17 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 def verify_password(plain_password, hashed_password):
+    # TODO: create the docsctring
     return pwd_context.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password):
+    # TODO: create the docsctring
     return pwd_context.hash(password)
 
 
 def authenticate_user(username: str, password: str):
+    # TODO: create the docsctring
     user = fake_users_db.get(username)
     
     if not user or not verify_password(password, user["hashed_password"]):
@@ -32,6 +34,7 @@ def authenticate_user(username: str, password: str):
 
 
 def create_access_token(data: dict, expires_delta: timedelta):
+    # TODO: create the docsctring
     to_encode = data.copy()
     expire = datetime.utcnow() + expires_delta
     to_encode.update({"exp": expire})
@@ -40,6 +43,7 @@ def create_access_token(data: dict, expires_delta: timedelta):
 
 
 def create_tokens(username: str):
+    # TODO: create the docsctring
     access_token = create_access_token(
         data={"sub": username},
         expires_delta=timedelta(minutes=int(ACCESS_TOKEN_EXPIRE_MINUTES))
@@ -54,6 +58,7 @@ def create_tokens(username: str):
     
     
 def verify_token(token: str, expected_type: str = "access"):
+    # TODO: create the docsctring
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         if payload.get("type") != expected_type and expected_type == "refresh":
